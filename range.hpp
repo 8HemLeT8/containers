@@ -7,12 +7,6 @@ namespace itertools
 {
 
 template <typename T>
-range_class<T> range(T start, T fin)
-{
-    return range_class<T>(start, fin);
-}
-
-template <typename T>
 class range_class
 {
 
@@ -67,4 +61,9 @@ public:
         return Itr(fin);
     }
 };
+template <typename T>
+range_class<T> range(T start, T fin)
+{
+    return range_class<T>(start, fin);
+}
 } // namespace itertools

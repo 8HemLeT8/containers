@@ -23,17 +23,20 @@ public:
     class const_iterator
     {
 
+        typedef typename T::const_iterator T_c_itr;
+        typedef typename P::const_iterator P_c_itr;
+
     private:
-        typename T::const_iterator iterator1_begin;
-        typename T::const_iterator iterator1_end;
-        typename P::const_iterator iterator2_begin;
-        typename P::const_iterator iterator2_end;
+        T_c_itr iterator1_begin;
+        T_c_itr iterator1_end;
+        P_c_itr iterator2_begin;
+        P_c_itr iterator2_end;
 
         bool is_A_fin() const { return iterator1_begin == iterator1_end; }
 
     public:
-        const_iterator(const typename T::const_iterator &itr1_b, const typename T::const_iterator &itr1_e,
-                       const typename P::const_iterator &itr2_b, const typename P::const_iterator &itr2_e)
+        const_iterator(const T_c_itr &itr1_b, const T_c_itr &itr1_e,
+                       const P_c_itr &itr2_b, const P_c_itr &itr2_e)
             : iterator1_begin(itr1_b), iterator1_end(itr1_e),
               iterator2_begin(itr2_b), iterator2_end(itr2_e) {}
 

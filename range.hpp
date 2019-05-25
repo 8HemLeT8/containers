@@ -20,25 +20,25 @@ public:
     {
 
     private:
-        T _start;
+        T curr;
 
     public:
-        const_iterator(T _s) : _start(_s) {}
+        const_iterator(T _start) : curr(_start) {}
 
         // ++i
         const_iterator &operator++()
         {
-            ++_start;
+            ++curr;
             return *this;
         }
 
         // Dereference
-        const T &operator*() const { return _start; }
+        const T &operator*() const { return curr; }
 
         // Equal comparison
-        bool operator==(const const_iterator &rhs) const { return _start == rhs._start; }
+        bool operator==(const const_iterator &rhs) const { return curr == rhs.curr; }
         // Not-Equal comparison
-        bool operator!=(const const_iterator &rhs) const { return !(_start == rhs._start); }
+        bool operator!=(const const_iterator &rhs) const { return !(curr == rhs.curr); }
     };
 
     auto begin() const

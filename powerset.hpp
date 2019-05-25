@@ -20,17 +20,17 @@ public:
     {
     }
 
-    class Itr
+    class iterator
     {
     private:
         T s1;
 
     public:
-        Itr(T _s1) : s1(_s1)
+        iterator(T _s1) : s1(_s1)
         {
         }
         // ++i
-        Itr &operator++()
+        iterator &operator++()
         {
             s1++;
             return *this;
@@ -41,7 +41,7 @@ public:
             return *s1;
         }
         // Not-Equal comparison
-        bool operator!=(const Itr &rhs) const
+        bool operator!=(const iterator &rhs) const
         {
             return s1 != rhs.s1;
         }

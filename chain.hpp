@@ -22,51 +22,50 @@ public:
 
     class const_iterator
     {
-
         typedef typename T::const_iterator T_c_itr;
         typedef typename P::const_iterator P_c_itr;
 
     private:
-        T_c_itr iterator1_begin;
+        T_c_itr iterator1_curr; // start fromn begin iterator 1
         T_c_itr iterator1_end;
-        P_c_itr iterator2_begin;
+        P_c_itr iterator2_curr; // start from begin iterator 2
         P_c_itr iterator2_end;
 
-        bool is_A_fin() const { return iterator1_begin == iterator1_end; }
+        bool is_A_fin() const { return iterator1_curr == iterator1_end; }
 
     public:
         const_iterator(const T_c_itr &itr1_b, const T_c_itr &itr1_e,
                        const P_c_itr &itr2_b, const P_c_itr &itr2_e)
-            : iterator1_begin(itr1_b), iterator1_end(itr1_e),
-              iterator2_begin(itr2_b), iterator2_end(itr2_e) {}
+            : iterator1_curr(itr1_b), iterator1_end(itr1_e),
+              iterator2_curr(itr2_b), iterator2_end(itr2_e) {}
 
         // ++i
         const_iterator &operator++()
         {
             if (is_A_fin())
-                ++iterator2_begin;
+                ++iterator2_curr;
             else
-                ++iterator1_begin;
+                ++iterator1_curr;
             return *this;
         }
         // Dereference
         const auto operator*() const
         {
             if (is_A_fin())
-                return *iterator2_begin;
-            return *iterator1_begin;
+                return *iterator2_curr;
+            return *iterator1_curr;
         }
-
+        // Equal
         bool operator==(const const_iterator &rhs) const
         {
-            if (iterator1_begin == rhs.iterator1_begin && iterator1_end == rhs.iterator1_end &&
-                iterator2_begin == rhs.iterator2_begin && iterator2_end == rhs.iterator2_end)
+            if (iterator1_curr == rhs.iterator1_curr && iterator1_end == rhs.iterator1_end &&
+                iterator2_curr == rhs.iterator2_curr && iterator2_end == rhs.iterator2_end)
             {
                 return true;
             }
             return false;
         }
-
+        // Not-Equal
         bool operator!=(const const_iterator &rhs) const
         {
             return !(*this == rhs);

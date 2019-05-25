@@ -29,40 +29,40 @@ public:
         typedef typename P::const_iterator P_c_itr;
 
     private:
-        T_c_itr iterator1_begin;
+        T_c_itr iterator1_curr;
         T_c_itr iterator1_end;
-        P_c_itr iterator2_begin;
+        P_c_itr iterator2_curr;
         P_c_itr iterator2_end;
 
     public:
         const_iterator(const T_c_itr &itr1_b, const T_c_itr &itr1_e,
                        const P_c_itr &itr2_b, const P_c_itr &itr2_e)
-            : iterator1_begin(itr1_b), iterator1_end(itr1_e),
-              iterator2_begin(itr2_b), iterator2_end(itr2_e) {}
+            : iterator1_curr(itr1_b), iterator1_end(itr1_e),
+              iterator2_curr(itr2_b), iterator2_end(itr2_e) {}
 
         // ++i
         const_iterator &operator++()
         {
-            ++iterator2_begin;
-            ++iterator1_begin;
+            ++iterator2_curr;
+            ++iterator1_curr;
             return *this;
         }
         // Dereference
         const auto operator*() const
         {
-            return std::make_pair(*iterator1_begin, *iterator2_begin);
+            return std::make_pair(*iterator1_curr, *iterator2_curr);
         }
-
+        // Equal
         bool operator==(const const_iterator &rhs) const
         {
-            if (iterator1_begin == rhs.iterator1_begin && iterator1_end == rhs.iterator1_end &&
-                iterator2_begin == rhs.iterator2_begin && iterator2_end == rhs.iterator2_end)
+            if (iterator1_curr == rhs.iterator1_curr && iterator1_end == rhs.iterator1_end &&
+                iterator2_curr == rhs.iterator2_curr && iterator2_end == rhs.iterator2_end)
             {
                 return true;
             }
             return false;
         }
-
+        // Not-Equal
         bool operator!=(const const_iterator &rhs) const
         {
             return !(*this == rhs);
@@ -79,7 +79,7 @@ public:
         return const_iterator(iterable1.end(), iterable1.end(), iterable2.end(), iterable2.end());
     }
 };
-
+// We need to print each element alone sperated by a comma.
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const std::pair<A, B> pair)
 {

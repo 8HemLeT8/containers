@@ -9,85 +9,75 @@ namespace itertools
 {
 
 template <typename T, typename P>
-class chain_class
+class chain
 {
 
 private:
-    T start_1;
-    P start_2;
+    T iterable1;
+    P iterable2;
 
 public:
-    chain_class(T s1, P s2) : start_1(s1), start_2(s2)
-    {
-    }
+    chain(const T itrbl1, const P itrbl2)
+        : iterable1(itrbl1), iterable2(itrbl2) {}
 
-    template <typename A, typename B>
-    class Itr
+    class const_iterator
     {
+
     private:
-        A s1;
-        B s2;
+        typename T::const_iterator iterator1_begin;
+        typename T::const_iterator iterator1_end;
+        typename P::const_iterator iterator2_begin;
+        typename P::const_iterator iterator2_end;
 
-        bool is_A_fin() const
-        {
-            if (s1 == s1.end())
-            {
-                return false;
-            }
-            return true;
-        }
+        bool is_A_fin() const { return iterator1_begin == iterator1_end; }
 
     public:
-        Itr(A _s1, B _s2) : s1(_s1), s2(_s2)
-        {
-        }
+        const_iterator(const typename T::const_iterator &itr1_b, const typename T::const_iterator &itr1_e,
+                       const typename P::const_iterator &itr2_b, const typename P::const_iterator &itr2_e)
+            : iterator1_begin(itr1_b), iterator1_end(itr1_e),
+              iterator2_begin(itr2_b), iterator2_end(itr2_e) {}
+
         // ++i
-        Itr<A, B> &operator++()
+        const_iterator &operator++()
         {
             if (is_A_fin())
-            {
-                s2++;
-            }
+                ++iterator2_begin;
             else
-            {
-                s1++;
-            }
-
+                ++iterator1_begin;
             return *this;
         }
         // Dereference
-        auto &operator*() const
+        const auto operator*() const
         {
             if (is_A_fin())
-            {
-                return *s2;
-            }
-            return *s1;
+                return *iterator2_begin;
+            return *iterator1_begin;
         }
-        // Not-Equal comparison
-        bool operator!=(const Itr<A, B> &rhs) const
+
+        bool operator==(const const_iterator &rhs) const
         {
-            if (is_A_fin())
+            if (iterator1_begin == rhs.iterator1_begin && iterator1_end == rhs.iterator1_end &&
+                iterator2_begin == rhs.iterator2_begin && iterator2_end == rhs.iterator2_end)
             {
-                return s1 != rhs.s1;
+                return true;
             }
-            return s2 != rhs.s2;
+            return false;
+        }
+
+        bool operator!=(const const_iterator &rhs) const
+        {
+            return !(*this == rhs);
         }
     };
 
     auto begin() const
     {
-        return (start_1.begin(), start_2.begin());
+        return const_iterator(iterable1.begin(), iterable1.end(), iterable2.begin(), iterable2.end());
     }
 
     auto end() const
     {
-        return (start_1.end(), start_2.end());
+        return const_iterator(iterable1.end(), iterable1.end(), iterable2.end(), iterable2.end());
     }
 };
-template <typename T, typename P>
-chain_class<T, P> chain(T start1, P start2)
-{
-    return chain_class<T, P>(start1, start2);
-}
 } // namespace itertools

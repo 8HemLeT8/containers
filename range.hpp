@@ -7,63 +7,48 @@ namespace itertools
 {
 
 template <typename T>
-class range_class
+class range
 {
 
 private:
-    T start;
-    T fin;
+    T start, fin;
 
 public:
-    range_class(T s, T f)
+    range(const T s, const T f) : start(s), fin(f) {}
+
+    class const_iterator
     {
-        start = s;
-        fin = f;
-    }
-    class Itr
-    {
+
     private:
         T _start;
 
     public:
-        Itr(T _s)
-        {
-            _start = _s;
-        }
+        const_iterator(T _s) : _start(_s) {}
+
         // ++i
-        Itr &operator++()
+        const_iterator &operator++()
         {
             ++_start;
             return *this;
         }
-        // i++
-        const Itr operator++(int)
-        {
-            Itr tmp = *this;
-            _start++;
-            return tmp;
-        }
+
         // Dereference
-        T &operator*() { return _start; }
+        const T &operator*() const { return _start; }
+
         // Equal comparison
-        bool operator==(const Itr &rhs) const { return _start == rhs._start; }
+        bool operator==(const const_iterator &rhs) const { return _start == rhs._start; }
         // Not-Equal comparison
-        bool operator!=(const Itr &rhs) const { return !(_start == rhs._start); }
+        bool operator!=(const const_iterator &rhs) const { return !(_start == rhs._start); }
     };
 
-    Itr begin() const
+    auto begin() const
     {
-        return Itr(start);
+        return const_iterator(start);
     }
 
-    Itr end() const
+    auto end() const
     {
-        return Itr(fin);
+        return const_iterator(fin);
     }
 };
-template <typename T>
-range_class<T> range(T start, T fin)
-{
-    return range_class<T>(start, fin);
-}
 } // namespace itertools

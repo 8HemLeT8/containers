@@ -33,7 +33,7 @@ public:
         }
 
         // Dereference
-        const T &operator*() const { return curr; }
+        const T operator*() const { return curr; }
 
         // Equal comparison
         bool operator==(const const_iterator &rhs) const { return curr == rhs.curr; }

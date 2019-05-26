@@ -1,111 +1,86 @@
 #pragma once
 #include <math.h>
-
+#include <string>
+#include <iostream>
 /* 
 Resources:
-    http://www.ocoudert.com/blog/2010/07/07/how-to-write-abstract-iterators-in-c/
-https://stackoverflow.com/questions/19923353/multiple-typename-arguments-in-c-template
-https://en.cppreference.com/w/cpp/language/decltype
+http://www.ocoudert.com/blog/2010/07/07/how-to-write-abstract-iterators-in-c/
+https://stackoverflow.com/questions/24365954/how-to-generate-a-power-set-of-a-given-set
 */
-using namespace std;
 namespace itertools
 {
 
 template <typename T>
-class powerset_class
+class powerset
 {
 
 private:
-    T _set;
+    T iterable;
+
+    // We want to know how many items are in the iterable object.
+    int totalnumber() const
+    {
+        int elements_number = 0;
+        for (auto i : iterable)
+        {
+            elements_number += 1;
+        }
+        return int(pow(2, elements_number));
+    }
 
 public:
-    powerset_class(T s) : _set(s) {}
+    powerset(const T itrbl) : iterable(itrbl) {}
 
-    class iterator
+    class const_iterator
     {
     private:
-        T from;
-        T to;
-        uint currIdx = 0; //      0 <= currIdx <= 2^set.size
+        T curr_iterable; // We pass the iterable object to iterate over it.
+        int size;
 
     public:
-        Itr(const T theSet, uint position)
-        {
-            currIdx = position;
-            mySet = theSet;
-        }
+        const_iterator(T current_itrbl, int current_size) : curr_iterable(current_itrbl), size(current_size) {}
+
         // ++i
-        iterator &operator++()
+        const_iterator &operator++()
         {
-            currIdx++;
+            // According to the resource above, we use a binary number to generate the set, therefore we increment the size to use it in the AND operation
+            ++size;
             return *this;
         }
+
         // Dereference
-        auto operator*() const {
-				T element_iterator = from;
-				vector<typename remove_const<typename remove_reference<decltype(*from)>::type>::type> ans;
-				unsigned int i = currIdx;
-				while (i != 0 && element_iterator != to){ 
-					unsigned int r = i % 2;
-					i = i >> 1; 
-					if (r == 1)
-						ans.emplace_back(*element_iterator);
-					++element_iterator;
-				}
-				return ans;
-			}
-        /*
-        auto &operator*() const
+        const T operator*() const
         {
-            string ans = "{";
-            bool last = true;
-
-            int i = 0;
-            for (auto piece : mySet)
-            {
-                if (currIdx & (1 << i))
-                {
-                    last = false;
-                    ans += (piece + ",");
-                    i++;
-                }
-            }
-            if (last == false)
-                ans = ans.substr(0, ans.length() - 1);
-            ans += "}";
-
-            return ans;
+            vector<typename remove_const<typename remove_reference<decltype(*(curr_iterable.begin()))>::type>::type> ans;
+            
         }
-*/
+
+        // Equal comparison
+        bool operator==(const const_iterator &rhs) const { return size == rhs.size; }
         // Not-Equal comparison
-        bool operator!=(const Itr &rhs)
-        {
-            return mySet.end() != rhs.mySet.end();
-        }
+        bool operator!=(const const_iterator &rhs) const { return !(*this == rhs); }
     };
-    int setLen() const
-    {
-        int len = 0;
-        for (auto sub : _set)
-        {
-            len++;
-        }
-        return len;
-    }
-    const auto begin() const
-    {
-        return Itr(_set, 0);
-    }
 
+    auto begin() const
+    {
+        // We pass 0 to mark the start of the set
+        return const_iterator(iterable, 0);
+    }
     auto end() const
     {
-        return Itr(_set, pow(2, setLen()));
+        int fullsize = totalnumber();
+        // We pass the fullsize to mark the end of the set
+        return const_iterator(iterable, fullsize);
     }
-}; // namespace itertools
+};
 
-template <typename T>
-powerset_class<T> powerset(T vset)
+template <typename U>
+std::ostream &operator<<(std::ostream &os, const typename std::set<U> myset)
 {
-    return powerset_class<T>(vset);
+    for (auto element : myset)
+    {
+        os << element;
+    }
+    return os;
 }
 } // namespace itertools

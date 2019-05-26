@@ -49,7 +49,7 @@ public:
             return *this;
         }
         // Dereference
-        const auto operator*() const
+        const auto &operator*() const
         {
             if (is_A_fin())
                 return *iterator2_curr;

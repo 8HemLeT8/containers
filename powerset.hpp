@@ -1,7 +1,8 @@
 #pragma once
+
 #include <math.h>
-#include <string>
-#include <iostream>
+#include <vector>
+
 /* 
 Resources:
 http://www.ocoudert.com/blog/2010/07/07/how-to-write-abstract-iterators-in-c/
@@ -34,11 +35,11 @@ public:
     class const_iterator
     {
     private:
-        T curr_iterable; // We pass the iterable object to iterate over it.
+        const T &curr_iterable; // We pass the iterable object to iterate over it.
         int size;
 
     public:
-        const_iterator(T current_itrbl, int current_size) : curr_iterable(current_itrbl), size(current_size) {}
+        const_iterator(const T &current_itrbl, int current_size) : curr_iterable(current_itrbl), size(current_size) {}
 
         // ++i
         const_iterator &operator++()
@@ -49,10 +50,18 @@ public:
         }
 
         // Dereference
-        const T operator*() const
+        auto operator*() const
         {
-            vector<typename remove_const<typename remove_reference<decltype(*(curr_iterable.begin()))>::type>::type> ans;
-            
+            // Using a vector to simulate a set (we had compilation errors using sets), the type is set to be the of the iterator first current.
+            std::vector<typename std::remove_const<typename std::remove_reference<decltype(*(curr_iterable.begin()))>::type>::type> ans;
+            int i = 1;
+            for (auto piece : curr_iterable)
+            {
+                if (i & size)
+                    ans.push_back(piece);
+                i = i << 1;
+            }
+            return ans;
         }
 
         // Equal comparison
@@ -73,14 +82,19 @@ public:
         return const_iterator(iterable, fullsize);
     }
 };
-
-template <typename U>
-std::ostream &operator<<(std::ostream &os, const typename std::set<U> myset)
+template <typename T>
+std::ostream &operator<<(ostream &os, const vector<T> power_set)
 {
-    for (auto element : myset)
+    os << "{";
+    int counter = 0;
+    for (auto current : power_set)
     {
-        os << element;
+        os << current;
+        counter++;
+        if (counter < power_set.size())
+            os << ",";
     }
+    os << "}";
     return os;
 }
-} // namespace itertools
+}; // namespace itertools

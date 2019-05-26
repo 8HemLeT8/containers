@@ -1,6 +1,8 @@
 #pragma once
 #include <utility>
 #include <tuple>
+using namespace std;
+
 /* 
 Resources:
 http://www.ocoudert.com/blog/2010/07/07/how-to-write-abstract-iterators-in-c/

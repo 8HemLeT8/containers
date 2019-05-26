@@ -1,65 +1,86 @@
 #pragma once
+#include <math.h>
+#include <string>
+#include <iostream>
 /* 
 Resources:
 http://www.ocoudert.com/blog/2010/07/07/how-to-write-abstract-iterators-in-c/
-https://stackoverflow.com/questions/19923353/multiple-typename-arguments-in-c-template
-https://en.cppreference.com/w/cpp/language/decltype
+https://stackoverflow.com/questions/24365954/how-to-generate-a-power-set-of-a-given-set
 */
 namespace itertools
 {
 
 template <typename T>
-class powerset_class
+class powerset
 {
 
 private:
-    T start_1;
+    T iterable;
 
-public:
-    powerset_class(T s1) : start_1(s1)
+    // We want to know how many items are in the iterable object.
+    int totalnumber() const
     {
+        int elements_number = 0;
+        for (auto i : iterable)
+        {
+            elements_number += 1;
+        }
+        return int(pow(2, elements_number));
     }
 
-    class iterator
+public:
+    powerset(const T itrbl) : iterable(itrbl) {}
+
+    class const_iterator
     {
     private:
-        T s1;
+        T curr_iterable; // We pass the iterable object to iterate over it.
+        int size;
 
     public:
-        iterator(T _s1) : s1(_s1)
-        {
-        }
+        const_iterator(T current_itrbl, int current_size) : curr_iterable(current_itrbl), size(current_size) {}
+
         // ++i
-        iterator &operator++()
+        const_iterator &operator++()
         {
-            s1++;
+            // According to the resource above, we use a binary number to generate the set, therefore we increment the size to use it in the AND operation
+            ++size;
             return *this;
         }
+
         // Dereference
-        auto &operator*() const
+        const T operator*() const
         {
-            return *s1;
+            vector<typename remove_const<typename remove_reference<decltype(*(curr_iterable.begin()))>::type>::type> ans;
+            
         }
+
+        // Equal comparison
+        bool operator==(const const_iterator &rhs) const { return size == rhs.size; }
         // Not-Equal comparison
-        bool operator!=(const iterator &rhs) const
-        {
-            return s1 != rhs.s1;
-        }
+        bool operator!=(const const_iterator &rhs) const { return !(*this == rhs); }
     };
 
     auto begin() const
     {
-        return (start_1.begin());
+        // We pass 0 to mark the start of the set
+        return const_iterator(iterable, 0);
     }
-
     auto end() const
     {
-        return (start_1.end());
+        int fullsize = totalnumber();
+        // We pass the fullsize to mark the end of the set
+        return const_iterator(iterable, fullsize);
     }
 };
-template <typename T>
-powerset_class<T> powerset(T start1)
+
+template <typename U>
+std::ostream &operator<<(std::ostream &os, const typename std::set<U> myset)
 {
-    return powerset_class<T>(start1);
+    for (auto element : myset)
+    {
+        os << element;
+    }
+    return os;
 }
 } // namespace itertools

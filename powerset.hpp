@@ -1,7 +1,9 @@
 #pragma once
 #include <math.h>
 #include <string>
+#include <vector>
 #include <iostream>
+
 /* 
 Resources:
 http://www.ocoudert.com/blog/2010/07/07/how-to-write-abstract-iterators-in-c/
@@ -52,7 +54,14 @@ public:
         const T operator*() const
         {
             vector<typename remove_const<typename remove_reference<decltype(*(curr_iterable.begin()))>::type>::type> ans;
-            
+            int i = 1;
+            for (auto piece : curr_iterable)
+            {
+                if (i & piece)
+                    ans.insert(piece);
+                i = i << 1;
+            }
+            return ans;
         }
 
         // Equal comparison
@@ -73,14 +82,22 @@ public:
         return const_iterator(iterable, fullsize);
     }
 };
-
-template <typename U>
-std::ostream &operator<<(std::ostream &os, const typename std::set<U> myset)
+template <typename T>
+std::ostream &operator<<(std::ostream &out, const std::vector<T> &ans)
 {
-    for (auto element : myset)
+    out << "{";
+    auto curr = ans.begin();
+    if (curr != ans.end())
     {
-        os << element;
+        out << *curr;
+        ++curr;
     }
-    return os;
+    while (temp != ans.end())
+    {
+        out << ',' << *curr;
+        ++curr;
+    }
+    out << "}";
+    return out;
 }
-} // namespace itertools
+}; // namespace itertools

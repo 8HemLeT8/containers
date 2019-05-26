@@ -49,6 +49,7 @@ int main()
             .CHECK_OUTPUT(test4, "abcdefghijklmnopqrstuvwxy"); // abcdefghijklmnopqrstuvwxy
 
         test1 = "";
+
         test2 = "";
         test3 = "";
         test4 = "";
@@ -73,7 +74,7 @@ int main()
             .CHECK_OUTPUT(test1, "123567")                                                 // 123567
             .CHECK_OUTPUT(test2, "1.500000 2.500000 3.500000 5.500000 6.500000 7.500000 ") // 1.500000 2.500000 3.500000 5.500000 6.500000 7.500000
             .CHECK_OUTPUT(test3, "abcdhello")                                              // abcdhello
-            .CHECK_OUTPUT(test4, "abcdefghijklmnopqrstuvwxyyxwvutsrqponmlkjihgfedcba");    // abcdefghijklmnopqrstuvwxyyxwvutsrqponmlkjihgfedcba
+            .CHECK_OUTPUT(test4, "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcb");    // abcdefghijklmnopqrstuvwxyyxwvutsrqponmlkjihgfedcba
 
         test1 = "";
         test2 = "";
@@ -154,9 +155,10 @@ string iterable_to_string(const Iterable &iterable)
         ostr << i << ",";
     return ostr.str();
 }
+
 /**
  * A test program for itertools.
  * 
  * @author Many students.
  * @since  2019-05
- */
+ **/

@@ -29,11 +29,7 @@ public:
         uint currIdx = 0; //      0 <= currIdx <= 2^set.size
 
     public:
-<<<<<<< HEAD
         Itr(const T theSet, uint position)
-=======
-        iterator(T _s1) : s1(_s1)
->>>>>>> 175d1828685dfc3f65cf4251ac11fa03b6252577
         {
             currIdx = position;
             mySet = theSet;
@@ -82,11 +78,7 @@ public:
         }
 */
         // Not-Equal comparison
-<<<<<<< HEAD
         bool operator!=(const Itr &rhs)
-=======
-        bool operator!=(const iterator &rhs) const
->>>>>>> 175d1828685dfc3f65cf4251ac11fa03b6252577
         {
             return mySet.end() != rhs.mySet.end();
         }
